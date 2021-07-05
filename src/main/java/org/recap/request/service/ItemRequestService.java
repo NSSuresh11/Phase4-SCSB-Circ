@@ -501,7 +501,7 @@ public class ItemRequestService {
         else {
             itemRequestInfo.setRequestType(ScsbCommonConstants.RETRIEVAL);
             if (null == requestItemEntity.getBulkRequestItemEntity()) {
-                InstitutionEntity institutionEntity = institutionDetailsRepository.findByInstitutionCode(itemRequestInfo.getRequestingInstitution());
+                InstitutionEntity institutionEntity = institutionDetailsRepository.findByInstitutionCode(requestItemEntity.getInstitutionEntity().getInstitutionCode());
                 DeliveryCodeEntity deliveryCodeEntity = deliveryCodeDetailsRepository.findByDeliveryCodeAndOwningInstitutionIdAndActive(requestItemEntity.getStopCode(), institutionEntity.getId(), 'Y');
                 DeliveryCodeTranslationEntity deliveryCodeTranslationEntity = deliveryCodeTranslationDetailsRepository.findByRequestingInstitutionandImsLocation(institutionEntity.getId(), deliveryCodeEntity.getId(), itemEntity.getImsLocationEntity().getId());
                 if (deliveryCodeTranslationEntity != null && deliveryCodeTranslationEntity.getImsLocationDeliveryCode() != null) {
