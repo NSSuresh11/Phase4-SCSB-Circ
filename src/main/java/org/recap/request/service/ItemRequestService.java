@@ -387,7 +387,14 @@ public class ItemRequestService {
                                 itemRequestInfo.setPatronBarcode(itemRequestServiceUtil.getPatronIdBorrowingInstitution(itemRequestInfo.getRequestingInstitution() ,itemRequestInfo.getItemOwningInstitution(), ScsbCommonConstants.REQUEST_TYPE_EDD));
                                 requestItemController.checkoutItem(itemRequestInfo, itemRequestInfo.getItemOwningInstitution());
                             }else {
-                                itemRequestInfo.setPatronBarcode(itemRequestServiceUtil.getPatronIdBorrowingInstitution(requestItemEntityRecalled.getInstitutionEntity().getInstitutionCode(), requestItemEntityRecalled.getItemEntity().getInstitutionEntity().getInstitutionCode(), ScsbCommonConstants.REQUEST_TYPE_RETRIEVAL));
+                                if(requestItemEntityRecalled.getInstitutionEntity().getInstitutionCode() != requestItemEntityRecalled.getItemEntity().getInstitutionEntity().getInstitutionCode()) {
+                                    itemRequestInfo.setPatronBarcode(itemRequestServiceUtil.getPatronIdBorrowingInstitution(requestItemEntityRecalled.getInstitutionEntity().getInstitutionCode(), requestItemEntityRecalled.getItemEntity().getInstitutionEntity().getInstitutionCode(), ScsbCommonConstants.REQUEST_TYPE_RETRIEVAL));
+                                }
+                                else {
+                                    if (itemRequestInfo.getPatronBarcode() == null) {
+                                        itemRequestInfo.setPatronBarcode(requestItemEntityRecalled.getPatronId());
+                                    }
+                                }
                                 requestItemController.checkoutItem(itemRequestInfo, itemRequestInfo.getItemOwningInstitution());
                             }
                             setItemRequestInfoForRequest(itemEntity, itemRequestInfo, requestItemEntityRecalled);
