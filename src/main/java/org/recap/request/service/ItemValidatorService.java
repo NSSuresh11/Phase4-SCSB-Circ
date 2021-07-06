@@ -131,7 +131,24 @@ public class ItemValidatorService {
                     }
 
                     if(itemRequestInformation.getRequestType().equalsIgnoreCase(ScsbCommonConstants.REQUEST_TYPE_RECALL)) {
-                        if (!checkRequestItemStatus(itemEntity1.getBarcode(), ScsbCommonConstants.REQUEST_STATUS_EDD)) {
+                        Boolean isRecallAvailableforOwnInst = false;
+                        Boolean isRecallAvailableforRequestingInst = false;
+
+                        InstitutionEntity requestingInstitutionEntity = institutionDetailsRepository.findByInstitutionCode(itemRequestInformation.getRequestingInstitution());
+                        InstitutionEntity owningInstitutionEntity = institutionDetailsRepository.findByInstitutionCode(itemRequestInformation.getItemOwningInstitution());
+
+                        Map<String, String> recallAvailablePropertyMap = propertyUtil.getPropertyByKeyForAllInstitutions(PropertyKeyConstants.ILS.ILS_RECALL_FUNCTIONALITY_AVAILABLE);
+
+                        isRecallAvailableforRequestingInst = Boolean.parseBoolean(recallAvailablePropertyMap.get(requestingInstitutionEntity.getInstitutionCode()));
+                        isRecallAvailableforOwnInst = Boolean.parseBoolean(recallAvailablePropertyMap.get(owningInstitutionEntity.getInstitutionCode()));
+
+                        if(!isRecallAvailableforRequestingInst) {
+                            return new ResponseEntity<>(ScsbConstants.RECALL_REQ_INST_ERR_MSG, getHttpHeaders(), HttpStatus.BAD_REQUEST);
+                        }
+                        else if(!isRecallAvailableforOwnInst) {
+                            return new ResponseEntity<>(ScsbConstants.RECALL_OWN_INST_ERR_MSG, getHttpHeaders(), HttpStatus.BAD_REQUEST);
+                        }
+                        else if (!checkRequestItemStatus(itemEntity1.getBarcode(), ScsbCommonConstants.REQUEST_STATUS_EDD)) {
                             return new ResponseEntity<>(ScsbConstants.RECALL_FOR_EDD_ITEM, getHttpHeaders(), HttpStatus.BAD_REQUEST);
                         }else if (!checkRequestItemStatus(itemEntity1.getBarcode(), ScsbCommonConstants.REQUEST_STATUS_CANCELED)) {
                             return new ResponseEntity<>(ScsbConstants.RECALL_FOR_CANCELLED_ITEM, getHttpHeaders(), HttpStatus.BAD_REQUEST);

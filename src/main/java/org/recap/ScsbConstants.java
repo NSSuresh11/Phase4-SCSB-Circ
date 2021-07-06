@@ -23,6 +23,8 @@ public final class ScsbConstants {
     public static final String INVALID_CUSTOMER_CODE = "Please enter the valid delivery Code";
     public static final String INVALID_DELIVERY_CODE = "Delivery location not valid for this item.";
     public static final String INVALID_TRANSLATED_CODE = "Translated Delivery Location not available for the requested Delivery Location.";
+    public static final String RECALL_REQ_INST_ERR_MSG = "Recall request is not supported";
+    public static final String RECALL_OWN_INST_ERR_MSG = "Recall request is not supported by item owning institution";
 
     public static final String INVALID_ITEM_BARCODE = "Item is not available";
     public static final String ITEM_BARCODE_IS_REQUIRED = "Item Barcode is required";
