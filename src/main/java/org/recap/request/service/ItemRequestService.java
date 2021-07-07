@@ -401,6 +401,7 @@ public class ItemRequestService {
                                 }
                                 requestItemController.checkoutItem(itemRequestInfo, itemRequestInfo.getItemOwningInstitution());
                             }
+                            itemRequestInfo.setRequestingInstitution(requestItemEntityRecalled.getInstitutionEntity().getInstitutionCode());
                             setItemRequestInfoForRequest(itemEntity, itemRequestInfo, requestItemEntityRecalled);
                             ItemInformationResponse itemInformationResponse = new ItemInformationResponse();
                             // Put back the Recall order to LAS. On success from LAS, recall order is updated to retrieval.
@@ -408,6 +409,7 @@ public class ItemRequestService {
                             logger.info("ItemRequestInfo Before Sending to GFA - Req Ins - {}, Item Ins - {}, Patron - {}", itemRequestInfo.getRequestingInstitution(), itemRequestInfo.getItemOwningInstitution(), itemRequestInfo.getPatronBarcode());
                             updateScsbAndGfa(itemRequestInfo, itemInformationResponse, itemEntity);
                             itemRefileResponse.setSuccess(true);
+                            itemRequestInfo.setRequestingInstitution(requestItemEntity.getInstitutionEntity().getInstitutionCode());
                         }
                     }
                     logger.info("Refile Request Id = {} Refile Barcode = {}", requestItemEntity.getId(), itemBarcode);
